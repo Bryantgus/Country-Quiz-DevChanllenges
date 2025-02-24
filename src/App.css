@@ -109,11 +109,21 @@ h1 {
 }
 
 .question {
-    font-size: 20px;
+    font-size: 22px;
     margin-top: 30px;
-    width: 350px;
+    width: 390px;
     text-align: center;
 }
+
+.answerContainer {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+    row-gap: 20px;
+    column-gap: 30px;
+    margin-top: 30px;
+}
+
 /*Style NumberQuestion Component*/
 .circleNumber {
     width: 40px;
@@ -125,5 +135,14 @@ h1 {
     justify-content: center;
     font-size: 14px;
     margin-top: 50px;
+    cursor: pointer;
+}
+
+/*Style BtnAnswer Component*/
+.btnAnswer {
+    width: 220px;
+    height: 50px;
+    background: #393F6E;
+    border-radius: 10px;
     cursor: pointer;
 }
