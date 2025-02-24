@@ -1,0 +1,129 @@
+.appContainer {
+    width: 100%;
+    height: 100vh;
+    background-image: url("assets/bg.webp");
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.appContainer * { 
+    color: #E2E4F3;
+}
+/* Styles StartQuiz Component*/
+.startQuizContainer {
+    width: 410px;
+    height: 400px;
+    background-color: #343964;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.congratsImg {
+    width: 90%;
+    height: 100px;
+    background-image: url("./assets/congrats.webp");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin-top: 30px;
+}
+
+.pContainer > p {
+    margin-top: 20px;
+    width: 300px;
+    font-size: 24px;
+    text-align: center;
+}
+
+.startQuizContainer > p:nth-child(3) {
+    font-weight: 400;
+    font-size: 16px;
+    margin-top: 30px;
+}
+
+/*Styles Button Component*/
+.btnComponent {
+    font-size: 16px;
+    font-weight: 600;
+    width: 240px;
+    height: 55px;
+    background-color: #393F6E;
+    border: none;
+    border-radius: 10px;
+    margin-top: 30px;
+    cursor: pointer;
+}
+
+.btnComponent:hover {
+    background: linear-gradient(#E65895, #BC6BE8);
+}
+
+/*Styles Questions Component*/
+.questionsContainer {
+    width: 780px;
+    height: 400px;
+    background-color: #343964;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+h1 {
+    font-weight: 500;
+}
+
+.scoreContainer {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(#E65895, #BC6BE8);
+    padding: 8px 13px;
+    border-radius: 16px;
+}
+
+.imgTrophy {
+    width: 20px;
+    height: 20px;
+    margin-right: 4px;
+    background-image: url("./assets/trophy.webp");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.numberQuestionsContainer {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+}
+
+.question {
+    font-size: 20px;
+    margin-top: 30px;
+    width: 350px;
+    text-align: center;
+}
+/*Style NumberQuestion Component*/
+.circleNumber {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(#E65895, #BC6BE8);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    margin-top: 50px;
+    cursor: pointer;
+}
