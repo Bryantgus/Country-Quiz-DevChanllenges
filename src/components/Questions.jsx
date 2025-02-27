@@ -1,4 +1,6 @@
-import { useState, useEffect, useRef } from "react"
+import PropTypes from "prop-types";
+import { useState, useEffect } from "react"
+import Header from "./Header";
 import NumbersQuestion from "./NumberQuestion";
 import BtnAnswer from "./BtnAnswer";
 import QuestionsGenerator from "../utils/QuesionGenerator"
@@ -6,14 +8,26 @@ import QuestionsGenerator from "../utils/QuesionGenerator"
 const URL_API = "https://restcountries.com/v3.1/all"
 const ENPOINT_API = "?fields=name,flags,population,capital,currencies,languages,continents"
 
-export default function Questions() {
+export default function Questions({ sendPoints }) {
     const [score, setScore] = useState(0);
     const [arrayQuestion, setArrayQuestions] = useState([]);
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [questionsAnswered, setQuestionsAnswered] = useState([]);
+    const [arrayAnswerBtn, setArrayAnswerBtn] = useState(() =>
+        Object.fromEntries(Array.from({ length: 10 }, (_, index) => [index, [null, null, null, null]]))
+    );
+    useEffect(() => {
+        const numQuestionsAnswered = questionsAnswered.filter(q => q.wasAnswer).length;
+
+        if (numQuestionsAnswered !== 10) {
+            return
+        }
+        sendPoints(score)
+                
+    },[questionsAnswered, score, sendPoints])
 
     useEffect(() => {
-        fetch(URL_API + ENPOINT_API)
+        fetch(URL_API + ENPOINT_API)    
           .then(response => response.json())
           .then(apiData => {
             const generatedQuestions = QuestionsGenerator(apiData);
@@ -27,22 +41,35 @@ export default function Questions() {
     }, []);
     
 
-    function isTheCorrectAnswer(answer) {
-        const wasAnswer = questionsAnswered[currentQuestion].wasAnswer;
-        const correctAnswer = arrayQuestion.currentQuestion.answer;
-        if (wasAnswer === false) {
-            if (correctAnswer === answer) {
-                setScore(prev => prev + 1);
-                
-            }
-        }    
-    }
-
-    useEffect(() => {
-        console.log(score);
-    },[score]);
+    function checkCorrectAnswer(answer, numberBtn) {
+        const correctAnswer = arrayQuestion[currentQuestion].answer;
+        const correctIndex = arrayQuestion[currentQuestion].arrayAnswers.findIndex(a => a === correctAnswer);
     
-
+        if (!questionsAnswered[currentQuestion].wasAnswer) {
+            const wasCorrectlyAnswered = correctAnswer === answer;
+    
+            setArrayAnswerBtn(prev => ({
+                ...prev,
+                [currentQuestion]: prev[currentQuestion].map((btn, index) => 
+                    index === correctIndex ? true : 
+                    index === numberBtn ? (wasCorrectlyAnswered ? true : false) : 
+                    null
+                )
+            }));
+    
+            setScore(prev => prev + (wasCorrectlyAnswered ? 1 : 0));
+    
+            setQuestionsAnswered(prev => 
+                prev.map((q, index) => 
+                    index === currentQuestion 
+                        ? { wasAnswer: true, wasCorrectlyAnswer: wasCorrectlyAnswered }
+                        : q
+                )
+            );
+        }
+    }
+    
+    
     function switchBetweenQuestions(numberOfQuestion) {
         let ToChangeCurrentQuestion = numberOfQuestion - 1;
         setCurrentQuestion(ToChangeCurrentQuestion)
@@ -50,36 +77,36 @@ export default function Questions() {
 
     return (
         <div className="questionsComponent">
-            <div className="header">
-                <h1 onClick={() => console.log(arrayQuestion[currentQuestion].question)}>
-                Country Quiz
-                </h1>
-                <div className="scoreContainer">
-                    <div className="imgTrophy"></div>
-                    <span>{score}/10 Points</span>
-                </div>
-            </div>
-            <div className="questionsContainer">
-                <NumbersQuestion switchBetweenQuestions={switchBetweenQuestions}/>
+            <Header score={score} />
+            <div className="questionsAnswerContainer">
+                <NumbersQuestion wasAnwer={questionsAnswered}
+                                 numberOfQuestion={switchBetweenQuestions}
+                                 sendNumberOfQuestion={switchBetweenQuestions}/>
+
                 <span className="question">
                 {arrayQuestion.length > 0 && arrayQuestion[currentQuestion] 
                     ? arrayQuestion[currentQuestion].question 
                     : "Loading..."}
                 </span>
 
-
-
                 <div className="answerContainer">
                 {arrayQuestion.length > 0 && arrayQuestion[currentQuestion] 
                     ? arrayQuestion[currentQuestion].arrayAnswers.map((answer, index) => (
                         <BtnAnswer 
                             key={index} 
+                            numberBtn={index} 
                             answer={answer} 
-                            getValue={isTheCorrectAnswer}/>
+                            getValue={checkCorrectAnswer}
+                            wasCorrectly={arrayAnswerBtn[currentQuestion]}                            
+                            />
                     ))
                     : "Loading answers..."}
                 </div>
             </div>
         </div>
     )
+}
+
+Questions.propTypes = {
+    sendPoints: PropTypes.func
 }

@@ -1,7 +1,7 @@
 import StartQuiz from "./components/StartQuiz"
 import Questions from "./components/Questions"
 import "./App.css"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export default function App() {
 
@@ -11,11 +11,18 @@ export default function App() {
   function startGame(value) {
     setStart(value);
   }
+  function endGame(points) {
+    setCorrectAnswers(points)
+  }
+
+  useEffect(() => {
+    setStart(false);
+  },[correctAnswers])
 
   return (
     <div className="appContainer">
       {!start ? <StartQuiz startGame={startGame} correctAnswers={correctAnswers}/>
-      : <Questions/>}           
+      : <Questions sendPoints={endGame}/>}           
     </div>
   )
 }

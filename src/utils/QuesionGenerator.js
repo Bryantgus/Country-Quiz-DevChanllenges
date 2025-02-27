@@ -53,8 +53,8 @@ const questions = [
 
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1)); // Genera un índice aleatorio entre 0 y i
-    [array[i], array[j]] = [array[j], array[i]]; // Intercambia los elementos en las posiciones i y j
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
   }
   return array;
 }
@@ -82,33 +82,32 @@ function replaceValue(value, randomCountry) {
 }
 
 export default function QuestionsGenerator(data) {
-  let dataToExport = []; // Asegúrate de declarar esto fuera del bucle
+  let dataToExport = []; 
   
-  for (let i = 0; i < 10; i++) { // Cambia el límite del bucle si necesitas más preguntas
+  for (let i = 0; i < 10; i++) { 
     const randomCountry = data[Math.floor(Math.random() * data.length)];
     const randomQuestion = questions[i];
     const toReplaceFormated = replaceValue(randomQuestion.toReplace, randomCountry);
     const randomQuestionsFormated = randomQuestion.question.replace("{}", toReplaceFormated);
     const correctAnswer = replaceValue(randomQuestion.answer, randomCountry);
 
-    let randomAnswers = []; // Aquí puedes almacenar las respuestas aleatorias
+    let randomAnswers = []; 
     
-    for (let j = 0; j < 3; j++) { // Itera 3 veces para generar 3 respuestas incorrectas
+    for (let j = 0; j < 3; j++) { 
       let randomCountryOther;
       let randomAnswer;
       
       do {
         randomCountryOther = data[Math.floor(Math.random() * data.length)];
         randomAnswer = replaceValue(randomQuestion.answer, randomCountryOther);
-      } while (randomCountry === randomCountryOther); // Asegúrate de que no se repita el país correcto
+      } while (randomCountry === randomCountryOther);
 
-      randomAnswers.push(randomAnswer); // Añade la respuesta incorrecta
+      randomAnswers.push(randomAnswer); 
     }
     
-    randomAnswers.push(correctAnswer); // Añade la respuesta correcta
-    randomAnswers = shuffleArray(randomAnswers); // Mezcla las respuestas
+    randomAnswers.push(correctAnswer); 
+    randomAnswers = shuffleArray(randomAnswers); 
 
-    // Añadir la pregunta con sus respuestas al array de exportación
     dataToExport.push({
       question: randomQuestionsFormated,
       answer: correctAnswer,
@@ -117,6 +116,5 @@ export default function QuestionsGenerator(data) {
   }
   dataToExport = shuffleArray(dataToExport);
 
-  console.log(dataToExport); // Aquí puedes ver cómo quedan las preguntas y respuestas generadas
-  return dataToExport; // Retorna las preguntas generadas
+  return dataToExport;
 }

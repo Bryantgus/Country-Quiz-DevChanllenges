@@ -1,7 +1,3 @@
-import "../assets/congrats.webp"
-
-// import congrats1 from "../assets/congrats.webp"
-
 export default function StartQuiz({correctAnswers, startGame}) {
     
     return (
